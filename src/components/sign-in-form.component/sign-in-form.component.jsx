@@ -1,6 +1,7 @@
 import FormInput from "../form-input/form-input.component";
-import { useState } from "react";
 import Button from "../button/button.component";
+
+import { useState } from "react";
 import './sign-in-form.styles.scss'
 import { signInWithGooglePopup, createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 
@@ -26,13 +27,12 @@ const  SignInForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try{
-            const response = await signInAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
+            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
             resetFormFields();      
         }
         catch(error){
             switch(error.code){
-                case 'auth/invalid-credentia':
+                case 'auth/invalid-credential':
                     alert('invalid credentials');
                     break;
                 default:
@@ -42,8 +42,7 @@ const  SignInForm = () => {
     };
 
     const signInWithGoogle = async ()=>{
-        const {user} = await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
     };
 
     return(
